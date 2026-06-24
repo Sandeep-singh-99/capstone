@@ -352,7 +352,7 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 relative">
             {/* Connector Line */}
-            <div className="hidden lg:block absolute top-[55px] left-[15%] right-[15%] h-[2px] bg-gradient-to-r from-emerald-500/30 to-teal-500/30 -z-10" />
+            <div className="hidden lg:block absolute top-[32px] left-[15%] right-[15%] h-[2px] bg-gradient-to-r from-emerald-500/30 to-teal-500/30 -z-10" />
 
             {/* Step 1 */}
             <div className="text-center space-y-4 flex flex-col items-center">
