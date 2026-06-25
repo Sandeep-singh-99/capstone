@@ -7,10 +7,12 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="flex flex-col min-h-screen">
-        {/* Navbar: Hidden on login/signup */}
+        {/* Navbar: Hidden on login/signup/chat/admin */}
         <Routes>
           <Route path="/login" element={null} />
           <Route path="/signup" element={null} />
+          <Route path="/chat" element={null} />
+          <Route path="/admin" element={null} />
           <Route path="*" element={<Navbar />} />
         </Routes>
 
@@ -19,10 +21,12 @@ export default function App() {
           <AppRouter />
         </main>
 
-        {/* Footer: Hidden on login/signup */}
+        {/* Footer: Hidden on login/signup/chat/admin */}
         <Routes>
           <Route path="/login" element={null} />
           <Route path="/signup" element={null} />
+          <Route path="/chat" element={null} />
+          <Route path="/admin" element={null} />
           <Route path="*" element={<Footer />} />
         </Routes>
       </div>
