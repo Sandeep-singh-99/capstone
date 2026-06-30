@@ -11,4 +11,12 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    host: true, // or "0.0.0.0" // allow access from Docker container
+    port: 5173,
+    allowedHosts: true,
+    watch: {
+      usePolling: true, // enables hot reload inside Docker
+    },
+  },
 });

@@ -1,0 +1,31 @@
+services:
+  server:
+    build: ./server
+    container_name: capstone-server
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./server:/app
+      - /app/_pycache__
+    env_file:
+      - ./server/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - WATCHFILES_FORCE_POLLING=true
+      - WATCHFILES_POLL_INTERVAL=0.5
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --reload-dir /app/app
+  
+
+  client:
+    build: ./client
+    container_name: capstone-client
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    command: npm run dev
+    depends_on:
+      - server
