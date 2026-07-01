@@ -28,3 +28,13 @@ class AuthService:
         
         access_token = create_access_token({"sub": new_user.id})
         return {"user": new_user, "access_token": access_token}
+    
+
+    @staticmethod
+    def authenticate_user(db: Session, email: str, hashed_password: str):
+        user = db.query(User).filter(User.email == email).first()
+        if not user or not verify_password(hashed_password, user.hashed_password):
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+        
+        access_token = create_access_token({"sub": user.id})
+        return {"user": user, "access_token": access_token}
