@@ -1,6 +1,6 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
 from app.api.v1.endpoints import auth
 
-app = FastAPI()
+app_router = APIRouter()
 
-app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
+app_router.include_router(auth.router, prefix="/auth", tags=["Authentication"])
