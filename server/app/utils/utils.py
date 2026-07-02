@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from jose import jwt
 import bcrypt
-from app.config.config import JWT_SECRET_KEY, ACCESS_TOKEN_EXPIRE_DAYS
+from app.core.config import JWT_SECRET_KEY, ACCESS_TOKEN_EXPIRE_DAYS
 
 
 # --- Password Hashing (Replacing Passlib) ---
