@@ -31,7 +31,7 @@ async def register_user(request: Request, response: Response, db: Session = Depe
         samesite="none"
     )
 
-    return {"message": "User registered successfully", "user": user}
+    return MessageResponse(message="User registered successfully", data=user)
 
 @router.post("/login", status_code=status.HTTP_200_OK)
 async def login_user(request: Request, response: Response, db: Session = Depends(get_db), user_sign_in: userSignIn = Depends()):

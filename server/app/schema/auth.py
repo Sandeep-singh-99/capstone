@@ -1,7 +1,11 @@
 from pydantic import BaseModel, Field, EmailStr
-from typing import Optional
+from typing import Optional, TypeVar, Generic
 from fastapi import Form
 from app.models.auth import UserRole
+
+
+# Declare a Type Variable for the dynamic data field
+T = TypeVar("T")
 
 class createUser(BaseModel):
     full_name: str = Field(..., min_length=1, max_length=100),
@@ -43,5 +47,6 @@ class userResponse(BaseModel):
         from_attributes = True
 
 
-class MessageResponse(BaseModel):
+class MessageResponse(BaseModel, Generic[T]):
     message: str
+    data: Optional[T] = None
