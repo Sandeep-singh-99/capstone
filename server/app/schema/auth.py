@@ -1,16 +1,32 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
 from fastapi import Form
 from app.models.auth import UserRole
 
 class createUser(BaseModel):
-    full_name: str = Form(..., min_length=1, max_length=100),
-    email: str = Form(..., min_length=1, max_length=100),
-    hashed_password: str = Form(..., min_length=6, max_length=30),
-    role: Optional[UserRole] = Form(UserRole.USER)
+    full_name: str = Field(..., min_length=1, max_length=100),
+    email: EmailStr
+    hashed_password: str = Field(..., min_length=6, max_length=30),
+    role: Optional[UserRole] = Field(UserRole.USER)
+
+    @classmethod
+    def as_form(
+        cls, 
+        full_name: str = Form(..., min_length=1, max_length=100),
+        email: EmailStr = Form(...),
+        hashed_password: str = Form(..., min_length=6, max_length=30),
+        role: Optional[UserRole] = Form(UserRole.USER)
+    ):
+        """Dependency to parse form data into a Pydantic model."""
+        return cls(
+            full_name=full_name,
+            email=email,
+            hashed_password=hashed_password,
+            role=role
+        )
 
 class userSignIn(BaseModel):
-    email: str = Form(..., min_length=1, max_length=100),
+    email: EmailStr = Form(...),
     hashed_password: str = Form(..., min_length=6, max_length=30)
 
 class userResponse(BaseModel):

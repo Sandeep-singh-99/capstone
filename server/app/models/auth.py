@@ -7,7 +7,6 @@ from datetime import datetime
 
 
 class UserRole(str, enum.Enum):
-    ADMIN = "admin"
     DOCTOR = "doctor"
     USER = "user"
 
@@ -22,6 +21,5 @@ class User(Base):
     image_public_id = Column(String, nullable=True)
     hashed_password = Column(String, nullable=True)
 
-    created_at = Column(String, default=lambda: datetime.utcnow().isoformat())
-    updated_at = Column(String, default=lambda: datetime.utcnow().isoformat(), onupdate=lambda: datetime.utcnow().isoformat())
-
+    created_at = Column(DateTime, default=lambda: datetime.utcnow())
+    updated_at = Column(DateTime, default=lambda: datetime.utcnow(), onupdate=lambda: datetime.utcnow())
