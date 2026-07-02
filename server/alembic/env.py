@@ -14,7 +14,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 dotenv.load_dotenv()
 
-from app.config.database import Base
+from app.core.database import Base
 from app.models.auth import User
 
 # this is the Alembic Config object, which provides
