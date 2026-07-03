@@ -10,7 +10,7 @@ from app.dependencies.dependencies import get_current_user
 router = APIRouter()
 
 
-@router.post("/register", status_code=status.HTTP_201_CREATED)
+@router.post("/register", response_model=MessageResponse[userResponse], status_code=status.HTTP_201_CREATED)
 async def register_user(request: Request, response: Response, db: Session = Depends(get_db), create_user: createUser = Depends(createUser.as_form), image: UploadFile = File(None)):
     """Endpoint to register a new user."""
     user, access_token = AuthService.register_user(
@@ -21,6 +21,8 @@ async def register_user(request: Request, response: Response, db: Session = Depe
         role=create_user.role,
         image=image
     )
+
+    
 
     response.set_cookie(
         key="access_token",

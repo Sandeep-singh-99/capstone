@@ -37,10 +37,10 @@ class AuthService:
             db.rollback()
             if image_public_id:
                 delete_image(image_public_id)  # Rollback image upload if user creation fails
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Error creating user")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Registration failed due to a server error. Please try again.")
         
-        access_token = create_access_token({"sub": new_user.id})
-        return {"user": new_user, "access_token": access_token}
+        access_token = create_access_token({"sub": new_user.email})
+        return new_user, access_token
     
 
     @staticmethod
@@ -49,5 +49,5 @@ class AuthService:
         if not user or not verify_password(hashed_password, user.hashed_password):
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
         
-        access_token = create_access_token({"sub": user.id})
-        return {"user": user, "access_token": access_token}
+        access_token = create_access_token({"sub": user.email})
+        return user, access_token
