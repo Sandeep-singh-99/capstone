@@ -9,10 +9,14 @@ class MedicalReport(Base):
 
     id = Column(String, primary_key=True, index=True, default=lambda: str(uuid.uuid4()))
     user_id = Column(String, ForeignKey("users.id"), nullable=False)
-    image_url = Column(String, nullable=False)
-    image_public_id = Column(String, nullable=False)
-    input_text = Column(String, nullable=False)
-    ai_summary = Column(String, nullable=False)
+    image_url = Column(String, nullable=True)
+    image_public_id = Column(String, nullable=True)
+    file_url = Column(String, nullable=True)
+    file_public_id = Column(String, nullable=True)
+    file_type = Column(String, nullable=True) # 'image' or 'pdf'
+    input_text = Column(String, nullable=True)
+    extracted_text = Column(String, nullable=True)
+    ai_summary = Column(String, nullable=True)
 
     created_at = Column(DateTime, default=lambda: datetime.utcnow())
     updated_at = Column(DateTime, default=lambda: datetime.utcnow(), onupdate=lambda: datetime.utcnow())
