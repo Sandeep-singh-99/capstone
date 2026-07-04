@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { Activity, ShieldCheck, Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { authApi } from "../api/authApi";
+import { setUser } from "../redux/auth/authSlice";
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -25,12 +30,23 @@ export default function LoginPage() {
     }
 
     setIsLoading(true);
-    // Simulate login request delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsLoading(false);
-    
-    // Redirect to landing (demo purposes)
-    navigate("/");
+    try {
+      const params = new URLSearchParams();
+      params.append("email", email);
+      params.append("hashed_password", password);
+
+      await authApi.login(params);
+      const user = await authApi.me();
+      dispatch(setUser(user));
+      toast.success("Successfully logged in.");
+      navigate("/dashboard");
+    } catch (err: any) {
+      const msg = err.response?.data?.detail || "Invalid email or password.";
+      setError(msg);
+      toast.error(msg);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
