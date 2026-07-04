@@ -1,14 +1,19 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { Activity, Mail, Lock, Eye, EyeOff, ArrowLeft, User, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { authApi } from "../api/authApi";
+import { setUser } from "../redux/auth/authSlice";
+import { toast } from "sonner";
 
 export default function SignupPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -71,12 +76,26 @@ export default function SignupPage() {
     }
 
     setIsLoading(true);
-    // Simulate signup delay
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsLoading(false);
-    
-    // Redirect to landing
-    navigate("/");
+    try {
+      const formData = new FormData();
+      formData.append("full_name", name);
+      formData.append("email", email);
+      formData.append("hashed_password", password);
+      formData.append("role", "patient");
+
+      const response = await authApi.register(formData);
+      if (response.data) {
+        dispatch(setUser(response.data));
+      }
+      toast.success("Successfully registered account.");
+      navigate("/dashboard");
+    } catch (err: any) {
+      const msg = err.response?.data?.detail || "Registration failed. Please try again.";
+      setError(msg);
+      toast.error(msg);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
