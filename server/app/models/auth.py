@@ -8,7 +8,8 @@ from datetime import datetime
 
 class UserRole(str, enum.Enum):
     DOCTOR = "doctor"
-    USER = "user"
+    ADMIN = "admin"
+    PATIENT = "patient"
 
 class User(Base):
     __tablename__ = "users"
@@ -16,7 +17,7 @@ class User(Base):
     id = Column(String, primary_key=True, index=True, default=lambda: str(uuid.uuid4()))
     full_name = Column(String, nullable=True)
     email = Column(String, index=True, nullable=True)
-    role = Column(Enum(UserRole), default=UserRole.USER, nullable=True)
+    role = Column(Enum(UserRole), default=UserRole.PATIENT, nullable=True)
     image_url = Column(String, nullable=True)
     image_public_id = Column(String, nullable=True)
     hashed_password = Column(String, nullable=True)

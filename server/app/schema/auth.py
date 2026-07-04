@@ -33,13 +33,15 @@ class userSignIn(BaseModel):
     email: EmailStr = Form(...),
     hashed_password: str = Form(..., min_length=6, max_length=30)
 
+from datetime import datetime
+
 class userResponse(BaseModel):
     id: str
     full_name: Optional[str] = None
     email: Optional[str] = None
     role: str
-    created_at: str
-    updated_at: str
+    created_at: datetime
+    updated_at: datetime
     image_url: Optional[str] = None
     image_public_id: Optional[str] = None
 

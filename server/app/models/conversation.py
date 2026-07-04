@@ -1,23 +1,19 @@
-from sqlalchemy import Boolean, Column, Enum, Integer, String, DateTime, Table, ForeignKey
+from sqlalchemy import Column, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from app.core.database import Base
 import uuid
-import enum
 from datetime import datetime
 
-
-class ChatHistory(Base):
-    __tablename__ = "chat_history"
+class Conversation(Base):
+    __tablename__ = "conversations"
 
     id = Column(String, primary_key=True, index=True, default=lambda: str(uuid.uuid4()))
     user_id = Column(String, ForeignKey("users.id"), nullable=False)
-    conversation_id = Column(String, ForeignKey("conversations.id"), nullable=True)
     report_id = Column(String, ForeignKey("medical_reports.id"), nullable=True)
-    question = Column(String, nullable=False)
-    answer = Column(String, nullable=False)
+    title = Column(String, nullable=False, default="New Consultation")
 
     created_at = Column(DateTime, default=lambda: datetime.utcnow())
     updated_at = Column(DateTime, default=lambda: datetime.utcnow(), onupdate=lambda: datetime.utcnow())
 
     # Relationships
-    conversation = relationship("Conversation", back_populates="messages")
+    messages = relationship("ChatHistory", back_populates="conversation", cascade="all, delete-orphan")
