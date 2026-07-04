@@ -11,7 +11,7 @@ class createUser(BaseModel):
     full_name: str = Field(..., min_length=1, max_length=100),
     email: EmailStr
     hashed_password: str = Field(..., min_length=6, max_length=30),
-    role: Optional[UserRole] = Field(UserRole.USER)
+    role: Optional[UserRole] = Field(UserRole.PATIENT)
 
     @classmethod
     def as_form(
@@ -19,7 +19,7 @@ class createUser(BaseModel):
         full_name: str = Form(..., min_length=1, max_length=100),
         email: EmailStr = Form(...),
         hashed_password: str = Form(..., min_length=6, max_length=30),
-        role: Optional[UserRole] = Form(UserRole.USER)
+        role: Optional[UserRole] = Form(UserRole.PATIENT)
     ):
         """Dependency to parse form data into a Pydantic model."""
         return cls(
