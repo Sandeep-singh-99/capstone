@@ -93,13 +93,13 @@ graph TD
 Add the following keys to your `server/.env` file:
 
 ```env
-DATABASE_URL="postgresql://neondb_owner:...@ep-noisy-snow-ahcf3g56-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require"
-JWT_SECRET_KEY="your-jwt-secret-string"
-ACCESS_TOKEN_EXPIRE_DAYS=15
+DATABASE_URL=
+JWT_SECRET_KEY=
+ACCESS_TOKEN_EXPIRE_DAYS=
 
-CLOUDINARY_CLOUD_NAME="dclpb8mva"
-CLOUDINARY_API_KEY="646183267773685"
-CLOUDINARY_API_SECRET="3dCo_o3Pkh8CjC7AypLTBSEDwLc"
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
 
 # Gemini AI Configuration (Required for active LLM/embeddings)
 GEMINI_API_KEY="your-google-gemini-api-key"
