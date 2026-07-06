@@ -2,15 +2,15 @@ from pydantic import BaseModel, Field, EmailStr
 from typing import Optional, TypeVar, Generic
 from fastapi import Form
 from app.models.auth import UserRole
-
+from datetime import datetime
 
 # Declare a Type Variable for the dynamic data field
 T = TypeVar("T")
 
 class createUser(BaseModel):
-    full_name: str = Field(..., min_length=1, max_length=100),
+    full_name: str = Field(..., min_length=1, max_length=100)
     email: EmailStr
-    hashed_password: str = Field(..., min_length=6, max_length=30),
+    hashed_password: str = Field(..., min_length=6, max_length=30)
     role: Optional[UserRole] = Field(UserRole.PATIENT)
 
     @classmethod
@@ -30,10 +30,20 @@ class createUser(BaseModel):
         )
 
 class userSignIn(BaseModel):
-    email: EmailStr = Form(...),
-    hashed_password: str = Form(..., min_length=6, max_length=30)
+    email: EmailStr
+    password: str
 
-from datetime import datetime
+    @classmethod
+    def as_form(
+        cls,
+        email: EmailStr = Form(...),
+        password: str = Form(..., min_length=6, max_length=30),
+    ):
+        return cls(
+            email=email,
+            password=password,
+        )
+
 
 class userResponse(BaseModel):
     id: str

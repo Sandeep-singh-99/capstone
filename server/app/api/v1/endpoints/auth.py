@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session, joinedload
 from app.core.database import get_db
 from app.service.auth import AuthService
 from app.models.auth import User, UserRole
-from app.schema.auth import createUser, userSignIn, userResponse, MessageResponse
+from app.schema.auth import createUser, userSignIn , userResponse, MessageResponse
 from app.dependencies.dependencies import get_current_user
 
 router = APIRouter()
@@ -58,11 +58,11 @@ async def login_user(
     request: Request,
     response: Response,
     db: Session = Depends(get_db),
-    user_sign_in: userSignIn = Depends(),
+    user_sign_in: userSignIn = Depends(userSignIn.as_form),
 ):
     """Endpoint to authenticate a user and provide an access token."""
     _, access_token = AuthService.authenticate_user(
-        db=db, email=user_sign_in.email, hashed_password=user_sign_in.hashed_password
+        db=db, email=user_sign_in.email, hashed_password=user_sign_in.password
     )
 
     response.set_cookie(
