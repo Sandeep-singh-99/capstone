@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   Activity,
   LayoutDashboard,
@@ -13,7 +13,6 @@ import {
   Moon,
   ChevronDown
 } from "lucide-react";
-import { RootState } from "../../app/store";
 import { clearUser } from "../../redux/auth/authSlice";
 import { authApi } from "../../api/authApi";
 import { useTheme } from "../theme-provider";
@@ -35,13 +34,14 @@ import {
   DropdownMenuTrigger
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
+import { useAppSelector } from "@/hooks/hooks";
 
 export function PatientSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { theme, setTheme } = useTheme();
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
 
   const handleLogout = async () => {
     try {
