@@ -99,7 +99,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="relative min-h-[calc(100vh-4rem)] flex items-stretch bg-background overflow-hidden">
+    <div className="relative min-h-screen flex items-stretch bg-background overflow-hidden">
       {/* Left Column: Visual/Marketing (Hidden on Mobile) */}
       <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-tr from-emerald-950 via-teal-900 to-emerald-950 text-white p-12 flex-col justify-between overflow-hidden">
         {/* Glow Effects */}

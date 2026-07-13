@@ -33,7 +33,7 @@ export default function LoginPage() {
     try {
       const params = new URLSearchParams();
       params.append("email", email);
-      params.append("hashed_password", password);
+      params.append("password", password);
 
       await authApi.login(params);
       const user = await authApi.me();
@@ -48,9 +48,9 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   };
-
+// min-h-[calc(100vh-4rem)]
   return (
-    <div className="relative min-h-[calc(100vh-4rem)] flex items-stretch bg-background overflow-hidden">
+    <div className="relative min-h-screen flex items-stretch bg-background overflow-hidden">
       {/* Left Column: Visual/Marketing (Hidden on Mobile) */}
       <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-tr from-emerald-950 via-teal-900 to-emerald-950 text-white p-12 flex-col justify-between overflow-hidden">
         {/* Glow Effects */}
@@ -170,9 +170,6 @@ export default function LoginPage() {
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <Label htmlFor="password">Password</Label>
-                    <a href="#" className="text-xs text-emerald-600 dark:text-emerald-400 hover:underline">
-                      Forgot password?
-                    </a>
                   </div>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -195,18 +192,6 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                {/* Remember Me */}
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="remember"
-                    className="rounded border-input text-emerald-600 focus:ring-emerald-500"
-                  />
-                  <label htmlFor="remember" className="text-xs text-muted-foreground cursor-pointer select-none">
-                    Remember device for 30 days
-                  </label>
-                </div>
-
                 {/* Submit button */}
                 <Button
                   type="submit"
@@ -220,47 +205,6 @@ export default function LoginPage() {
                   )}
                 </Button>
               </form>
-
-              {/* Social Login Divider */}
-              <div className="relative my-6">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-border" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">Or connect with</span>
-                </div>
-              </div>
-
-              {/* Social Login Buttons */}
-              <div className="grid grid-cols-2 gap-3">
-                <Button variant="outline" className="text-xs gap-2 py-4.5 hover:bg-muted/50 border-border">
-                  <svg className="h-4 w-4" viewBox="0 0 24 24">
-                    <path
-                      fill="currentColor"
-                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                    />
-                    <path
-                      fill="currentColor"
-                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                    />
-                    <path
-                      fill="currentColor"
-                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
-                    />
-                    <path
-                      fill="currentColor"
-                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                    />
-                  </svg>
-                  Google
-                </Button>
-                <Button variant="outline" className="text-xs gap-2 py-4.5 hover:bg-muted/50 border-border">
-                  <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.51 12.09 1.007 1.452 2.207 3.08 3.774 3.02 1.51-.066 2.083-.98 3.907-.98 1.81 0 2.336.98 3.907.95 1.6-.03 2.637-1.47 3.633-2.92 1.157-1.68 1.637-3.32 1.666-3.41-.03-.01-3.18-1.22-3.21-4.83-.03-3.02 2.48-4.47 2.58-4.53-1.42-2.09-3.62-2.33-4.4-2.39-1.92-.16-3.69 1.16-4.66 1.16zM15.702 3.676c.8-1.01 1.34-2.4 1.19-3.79-1.18.05-2.61.79-3.46 1.79-.76.88-1.42 2.29-1.24 3.66 1.32.1 2.68-.65 3.51-1.66z" />
-                  </svg>
-                  Apple
-                </Button>
-              </div>
             </CardContent>
             <CardFooter className="justify-center border-t border-border/80 bg-muted/10 py-4">
               <span className="text-xs text-muted-foreground">
