@@ -1,7 +1,8 @@
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
 
 export const axiosClient = axios.create({
   baseURL: API_BASE_URL,
@@ -27,7 +28,9 @@ axiosClient.interceptors.response.use(
   },
   (error: AxiosError<any>) => {
     if (error.code === "ECONNABORTED") {
-      toast.error("Request timed out. Please check your network and try again.");
+      toast.error(
+        "Request timed out. Please check your network and try again.",
+      );
       return Promise.reject(error);
     }
 
@@ -48,13 +51,19 @@ axiosClient.interceptors.response.use(
         if (!error.config?.url?.includes("/auth/me")) {
           toast.warning("Session expired. Please log in again.");
           // Only redirect if not already on login/signup page
-          if (!window.location.pathname.includes("/login") && !window.location.pathname.includes("/signup") && window.location.pathname !== "/") {
+          if (
+            !window.location.pathname.includes("/login") &&
+            !window.location.pathname.includes("/signup") &&
+            window.location.pathname !== "/"
+          ) {
             window.location.href = "/login";
           }
         }
         break;
       case 403:
-        toast.error("Access denied. You do not have permission for this action.");
+        toast.error(
+          "Access denied. You do not have permission for this action.",
+        );
         break;
       case 404:
         toast.error(errorMessage || "Requested resource not found.");
@@ -63,8 +72,12 @@ axiosClient.interceptors.response.use(
         // Validation error
         if (data?.detail && Array.isArray(data.detail)) {
           const firstErr = data.detail[0];
-          const field = firstErr.loc ? firstErr.loc[firstErr.loc.length - 1] : "";
-          toast.error(`Validation Error: ${field ? `'${field}' ` : ""}${firstErr.msg}`);
+          const field = firstErr.loc
+            ? firstErr.loc[firstErr.loc.length - 1]
+            : "";
+          toast.error(
+            `Validation Error: ${field ? `'${field}' ` : ""}${firstErr.msg}`,
+          );
         } else {
           toast.error(errorMessage || "Validation failed.");
         }
@@ -80,5 +93,5 @@ axiosClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );

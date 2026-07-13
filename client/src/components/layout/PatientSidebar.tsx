@@ -14,7 +14,7 @@ import {
   ChevronDown
 } from "lucide-react";
 import { clearUser } from "../../redux/auth/authSlice";
-import { authApi } from "../../api/authApi";
+// import { authApi } from "../../api/authApi";
 import { useTheme } from "../theme-provider";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import {
@@ -45,7 +45,7 @@ export function PatientSidebar() {
 
   const handleLogout = async () => {
     try {
-      await authApi.logout();
+      // await authApi.logout();
       dispatch(clearUser());
       navigate("/login");
     } catch (e) {
