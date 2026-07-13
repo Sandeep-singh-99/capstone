@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { Activity, Mail, Lock, Eye, EyeOff, ArrowLeft, User, Check, X } from "lucide-react";
+import { Activity, Mail, Lock, Eye, EyeOff, ArrowLeft, User, Check, X, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,6 +22,26 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const [role, setRole] = useState("patient");
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setImage(null);
+    setImagePreview(null);
+  };
 
   // Password criteria states
   const [criteria, setCriteria] = useState({
@@ -81,7 +101,10 @@ export default function SignupPage() {
       formData.append("full_name", name);
       formData.append("email", email);
       formData.append("hashed_password", password);
-      formData.append("role", "patient");
+      formData.append("role", role);
+      if (image) {
+        formData.append("image", image);
+      }
 
       const response = await authApi.register(formData);
       if (response.data) {
@@ -99,7 +122,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="relative min-h-[calc(100vh-4rem)] flex items-stretch bg-background overflow-hidden">
+    <div className="relative min-h-screen flex items-stretch bg-background overflow-hidden">
       {/* Left Column: Visual/Marketing (Hidden on Mobile) */}
       <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-tr from-emerald-950 via-teal-900 to-emerald-950 text-white p-12 flex-col justify-between overflow-hidden">
         {/* Glow Effects */}
@@ -208,6 +231,41 @@ export default function SignupPage() {
                   </div>
                 )}
 
+                {/* Profile Image Upload */}
+                <div className="flex flex-col items-center justify-center space-y-2 pb-2">
+                  <Label className="text-sm font-medium self-start">Profile Picture</Label>
+                  <div className="relative group">
+                    <div className="h-20 w-20 rounded-full border-2 border-dashed border-muted-foreground/30 hover:border-emerald-500/50 flex items-center justify-center overflow-hidden bg-muted/10 transition-colors relative cursor-pointer">
+                      {imagePreview ? (
+                        <img src={imagePreview} alt="Preview" className="h-full w-full object-cover" />
+                      ) : (
+                        <Camera className="h-6 w-6 text-muted-foreground group-hover:text-emerald-500 transition-colors" />
+                      )}
+                      <input
+                        type="file"
+                        id="image"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="absolute inset-0 opacity-0 cursor-pointer"
+                        disabled={isLoading}
+                      />
+                    </div>
+                    {imagePreview && (
+                      <button
+                        type="button"
+                        onClick={handleRemoveImage}
+                        className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center hover:bg-destructive/90 transition-colors"
+                        disabled={isLoading}
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    )}
+                  </div>
+                  {!imagePreview && (
+                    <span className="text-[10px] text-muted-foreground">Click to upload JPG, PNG or WebP</span>
+                  )}
+                </div>
+
                 {/* Name field */}
                 <div className="space-y-2">
                   <Label htmlFor="name">Full Name</Label>
@@ -239,6 +297,24 @@ export default function SignupPage() {
                       className="pl-9 focus-visible:ring-emerald-500"
                       disabled={isLoading}
                     />
+                  </div>
+                </div>
+
+                {/* Role field */}
+                <div className="space-y-2">
+                  <Label htmlFor="role">Role</Label>
+                  <div className="relative">
+                    <Activity className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <select
+                      id="role"
+                      value={role}
+                      onChange={(e) => setRole(e.target.value)}
+                      className="flex h-8 w-full min-w-0 rounded-lg border border-input bg-transparent pl-9 pr-3 py-1 text-base transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 focus-visible:ring-emerald-500"
+                      disabled={isLoading}
+                    >
+                      <option value="patient" className="bg-background text-foreground">Patient</option>
+                      <option value="doctor" className="bg-background text-foreground">Doctor</option>
+                    </select>
                   </div>
                 </div>
 
