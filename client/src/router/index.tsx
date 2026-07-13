@@ -2,10 +2,10 @@ import React, { lazy, Suspense, useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../app/store";
-import { authApi } from "../api/authApi";
 import { setUser, clearUser, setLoading } from "../redux/auth/authSlice";
 import { PatientLayout } from "../components/layout/PatientLayout";
 import { LoadingSkeleton } from "../components/common/LoadingSkeleton";
+import { useCheckAuth } from "@/api/authApi";
 
 // Lazy-loaded pages
 const LandingPage = lazy(() => import("../pages/landing"));
@@ -19,6 +19,7 @@ const HistoryPage = lazy(() => import("../pages/History"));
 const SpecialistsPage = lazy(() => import("../pages/Specialists"));
 const RemindersPage = lazy(() => import("../pages/Reminders"));
 const AdminPage = lazy(() => import("../pages/admin"));
+
 
 // Loading fallback component
 function PageLoader() {
@@ -71,11 +72,12 @@ function GuestRoute({ children }: { children: React.ReactNode }) {
 
 export function AppRouter() {
   const dispatch = useDispatch();
+  const { refetch } = useCheckAuth();
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const user = await authApi.me();
+        const { data: user } = await refetch();
         dispatch(setUser(user));
       } catch (err) {
         dispatch(clearUser());

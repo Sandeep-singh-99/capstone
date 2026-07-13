@@ -7,9 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import { authApi } from "../api/authApi";
 import { setUser } from "../redux/auth/authSlice";
 import { toast } from "sonner";
+import { useCheckAuth, useSignIn } from "@/api/authApi";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -19,6 +19,9 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const signInMutation = useSignIn();
+  const { refetch } = useCheckAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,12 +34,12 @@ export default function LoginPage() {
 
     setIsLoading(true);
     try {
-      const params = new URLSearchParams();
-      params.append("email", email);
-      params.append("password", password);
+      const formDataToSend = new FormData();
+      formDataToSend.append("email", email);
+      formDataToSend.append("password", password);
 
-      await authApi.login(params);
-      const user = await authApi.me();
+      await signInMutation.mutateAsync(formDataToSend);
+      const { data: user } = await refetch();
       dispatch(setUser(user));
       toast.success("Successfully logged in.");
       navigate("/dashboard");

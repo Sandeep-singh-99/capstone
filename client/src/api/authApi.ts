@@ -1,4 +1,5 @@
-import { axiosClient } from "./axiosClient";
+import { axiosClient } from "@/api/axiosClient";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export interface UserResponse {
   id: string;
@@ -15,34 +16,36 @@ export interface MessageResponse<T> {
   data?: T;
 }
 
-export const authApi = {
-  async register(formData: FormData): Promise<MessageResponse<UserResponse>> {
-    // Accepts FormData with: full_name, email, hashed_password, role, and optional image
-    const response = await axiosClient.post<MessageResponse<UserResponse>>("/auth/register", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    return response.data;
-  },
+export const useSignIn = () => {
+  return useMutation<UserResponse, Error, FormData>({
+    mutationFn: async (formData: FormData) => {
+      const response = await axiosClient.post('/auth/login',  formData, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      })
+      return response.data
+    }
+  })
+}
 
-  async login(params: URLSearchParams): Promise<MessageResponse<void>> {
-    // Accepts URLSearchParams with: email, hashed_password
-    const response = await axiosClient.post<MessageResponse<void>>("/auth/login", params, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    });
-    return response.data;
-  },
 
-  async me(): Promise<UserResponse> {
-    const response = await axiosClient.get<UserResponse>("/auth/me");
-    return response.data;
-  },
-
-  async logout(): Promise<MessageResponse<void>> {
-    const response = await axiosClient.post<MessageResponse<void>>("/auth/logout");
-    return response.data;
-  },
+export const useCheckAuth = () => {
+  return useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const response = await axiosClient.get("/auth/me", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data;
+    },
+    staleTime: 0,
+    gcTime: 0,
+    retry: false,
+    enabled: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
 };
